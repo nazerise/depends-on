@@ -1,0 +1,29 @@
+import requests
+import time
+import os
+readiness_url = []
+def get_environment_urls():
+    for key, value in os.environ.items():
+        if key.startswith('readiness_url'):
+            readiness_url.append(value)
+    return readiness_url
+
+def check_url_ready(check_url, interval=10):
+    for url in check_url:
+        flag_ckeck = False
+        while flag_ckeck != True:
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    print(f"{url} is ready.")
+                    flag_ckeck = True
+                    break
+                else:
+                    print(f"{url} returned status code {response.status_code}. Waiting...")
+                    time.sleep(interval)
+            except requests.RequestException as e:
+                print(f"Error checking {url}: {e}. Waiting...")
+                time.sleep(interval)
+
+get_environment_urls()
+check_url_ready(readiness_url)
