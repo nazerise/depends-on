@@ -13,7 +13,7 @@ def check_url_ready(check_url, interval=10):
         flag_ckeck = False
         while flag_ckeck != True:
             try:
-                response = requests.get(url)
+                response = requests.get(url, verify=False)
                 if response.status_code == 200:
                     print(f"{url} is ready.")
                     flag_ckeck = True
